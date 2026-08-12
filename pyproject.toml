@@ -1,7 +1,7 @@
 [project]
 name = "nextkalaapi"
 version = "0.1.0"
-description = "Add your description here"
+description = "Backend of nextkala project"
 readme = "README.md"
 authors = [
     { name = "khosraviTech", email = "khosravitech@gmail.com" }
