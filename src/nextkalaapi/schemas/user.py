@@ -22,7 +22,11 @@ class UserCreate(BaseModel):
     username: str
     password: str
 
-# TODO: UserResponse
+# user response (read & delete)
+class UserResponse(BaseModel):
+    first_name: str
+    last_name: str
+    email: str
 
 class User(BaseModel):
     id: int
