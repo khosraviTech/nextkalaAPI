@@ -9,7 +9,7 @@ class UserInfoUpdate(BaseModel):
     last_name: str
     email: str
 
-
+# user update
 class UserPasswordUpdate(BaseModel):
     password: str
 
