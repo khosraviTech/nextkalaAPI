@@ -10,6 +10,6 @@ app.include_router(products.router ,prefix='/products',tags=["product"])
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hello": "nextkala API"}
 
 
