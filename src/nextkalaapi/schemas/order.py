@@ -19,7 +19,7 @@ class PaymentStatus(str, Enum):
 
 
 
-#TODO: order response (read & delete)
+
 
 # order update: there is no editing order in nextkala site 
 
@@ -37,3 +37,6 @@ class OrderCreate(BaseModel):
     orderStatus: OrderStatus = OrderStatus.processing
     createdAt: str
 
+# order response (read & delete)
+class OrderResponse(OrderCreate):
+    pass
