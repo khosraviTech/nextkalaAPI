@@ -1,3 +1,4 @@
+from datetime import datetime
 from enum import Enum
 from typing import Annotated
 from pydantic import BaseModel
@@ -31,11 +32,11 @@ class OrderCreate(BaseModel):
     items: list[CartItem]
     subtotal: int
     shipping: int
-    tax: str
+    tax: int
     total: int
     paymentStatus: PaymentStatus = PaymentStatus.pending
     orderStatus: OrderStatus = OrderStatus.processing
-    createdAt: str
+    createdAt: datetime
 
 # order response (read & delete)
 class OrderResponse(OrderCreate):

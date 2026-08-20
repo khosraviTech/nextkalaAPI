@@ -6,10 +6,12 @@ from sqlalchemy import Enum as SQLEnum, String
 
 class Base(DeclarativeBase):#alchemy db model
     pass
+
 class Role(str, Enum):
     ADMIN = "admin"
     MODERATOR = "moderator"
     USER = "user"
+
 class User(Base):
     id:Mapped[int]=mapped_column(primary_key=True)
     first_name:Mapped[str]=mapped_column(nullable=False)
