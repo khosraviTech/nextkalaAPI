@@ -28,13 +28,15 @@ class Product(BaseModel):
     id: int
     title: str
     description: str
-    category: str | None = None
     price: float
+    brand: str
+    images: list[str]
+
+    category: str | None = None
     discountPercentage: float | None = None
     rating: float | None = None
     stock: int | None = None
     tags: list[str] | None = None
-    brand: str | None = None
     sku: str | None = None
     weight: float | None = None
     dimensions: Dimensions | None = None
@@ -45,5 +47,4 @@ class Product(BaseModel):
     returnPolicy: str | None = None
     minimumOrderQuantity: int | None = None
     meta: Meta | None = None
-    images: list[str] | None = None
     thumbnail: str | None = None
