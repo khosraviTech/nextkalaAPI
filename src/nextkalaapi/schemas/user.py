@@ -33,12 +33,12 @@ class User(BaseModel):
     first_name: str
     last_name: str
     email: str
+    password: str 
     maiden_name: str | None = None
     age: int | None = None
     gender: Gender | None = None
     phone: str | None = None
     username: str | None = None
-    password: str | None = None
     birth_date: str | None = None
     image: str | None = None
     blood_group: str | None = None
