@@ -1,10 +1,8 @@
 from enum import Enum
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import ARRAY, Enum as SQLEnum, Mapped, String
+from sqlalchemy import   Mapped
 from nextkalaapi.models.order_item_model import OrderItem
-from nextkalaapi.models.tag_model import Tag
 from datetime import UTC, datetime
-from zoneinfo import ZoneInfo
 from sqlalchemy import DateTime
 
 
@@ -27,6 +25,7 @@ class PaymentStatus(Mapped[str], Enum):
 
 class Order(Base):
     __tablename__ = "orders"
+
     id: Mapped[Mapped[int]] = mapped_column(nullable=False, primary_key=True)
     user_id: Mapped[int] = mapped_column(nullable=False)
     # TODO:cartItem or orderitem model for this problem of db design
@@ -46,4 +45,4 @@ class Order(Base):
         nullable=False,
     )
 
-    pass
+    
