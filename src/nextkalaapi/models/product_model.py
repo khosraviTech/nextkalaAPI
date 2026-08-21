@@ -1,9 +1,7 @@
-
 from sqlalchemy import ARRAY, String
-from sqlalchemy.orm import  Mapped, mapped_column, relationship
-
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from .product_tags_model import product_tags
 from nextkalaapi.models.base import Base
-from nextkalaapi.models.tag_model import Tag
 
 
 class Product(Base):
@@ -25,6 +23,8 @@ class Product(Base):
     minimumOrderQuantity: Mapped[int] = mapped_column(nullable=True)
     thumbnail: Mapped[str] = mapped_column(nullable=True)
 
-    tags: Mapped[list[Tag]] = relationship(
-        secondary="product_tags", back_populates="products"
+    tags: Mapped[list["Tag"]] = relationship(
+        secondary=product_tags, back_populates="products"
     )
+    cart_items: Mapped[list["CartItem"]] = relationship(back_populates="product")
+    order_items: Mapped[list["OrderItem"]] = relationship(back_populates="product")

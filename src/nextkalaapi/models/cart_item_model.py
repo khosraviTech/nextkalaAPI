@@ -4,8 +4,8 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from nextkalaapi.models.product_model import Product
 
 
-
 from nextkalaapi.models.base import Base
+
 
 class CartItem(Base):
     __tablename__ = "cart_items"
@@ -19,3 +19,4 @@ class CartItem(Base):
     totalItemPrice: Mapped[int] = mapped_column(nullable=False)
 
     product: Mapped[Product] = relationship(back_populates="cart_items")
+    cart: Mapped["Cart"] = relationship(back_populates="items")

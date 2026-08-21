@@ -2,12 +2,9 @@ from enum import Enum
 
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy import String
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from nextkalaapi.models.base import Base
-
-
-
 
 
 class Role(str, Enum):
@@ -41,3 +38,4 @@ class User(Base):
     university: Mapped[str] = mapped_column(nullable=True)
     bank: Mapped[str] = mapped_column(nullable=True)
     company: Mapped[str] = mapped_column(nullable=True)
+    cart: Mapped["Cart"] = relationship(back_populates="user")
