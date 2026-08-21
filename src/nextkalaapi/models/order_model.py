@@ -26,9 +26,9 @@ class PaymentStatus(Mapped[str], Enum):
 
 
 class Order(Base):
+    __tablename__ = "orders"
     id: Mapped[Mapped[int]] = mapped_column(nullable=False, primary_key=True)
-    userName: Mapped[str] = mapped_column(String(200), nullable=False)
-    userEmail: Mapped[str] = mapped_column(String(200), nullable=False)
+    user_id: Mapped[int] = mapped_column(nullable=False)
     # TODO:cartItem or orderitem model for this problem of db design
     items: Mapped[list[OrderItem]] = relationship(
         back_populates="order",

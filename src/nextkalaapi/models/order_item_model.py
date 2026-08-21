@@ -16,6 +16,7 @@ class Base(DeclarativeBase):  # alchemy db model
 
 
 class OrderItem(Base):
+    __tablename__='order_items'
     id: Mapped[int] = mapped_column(primary_key=True)
     title:Mapped[str]=mapped_column(String(50),nullable=False)
     image:Mapped[list[str]]=mapped_column(nullable=False)

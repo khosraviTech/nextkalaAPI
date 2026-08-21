@@ -10,6 +10,7 @@ class Base(DeclarativeBase):#alchemy db model
     pass
 
 class Product(Base):
+    __tablename__ = "products"
     id: Mapped[int]=mapped_column(primary_key=True)
     title: Mapped[str]=mapped_column(nullable=False,String(100))
     description: Mapped[str]=mapped_column(nullable=False,String(300))
