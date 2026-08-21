@@ -1,0 +1,39 @@
+from enum import Enum
+from pydantic import PositiveInt
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy import ARRAY, Enum as SQLEnum, Mapped, String
+from nextkalaapi.models.order_model import Order
+from nextkalaapi.models.tag_model import Tag
+from datetime import datetime
+from zoneinfo import ZoneInfo
+from sqlalchemy import DateTime
+
+from nextkalaapi.schemas.product import Product
+
+
+class Base(DeclarativeBase):  # alchemy db model
+    pass
+
+
+class OrderItem(Base):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title:Mapped[str]=mapped_column(String(50),nullable=False)
+    image:Mapped[list[str]]=mapped_column(nullable=False)
+    price:Mapped[PositiveInt]=mapped_column(nullable=False)
+    quantity:Mapped[PositiveInt]=mapped_column(nullable=False)
+    total_item_price:Mapped[PositiveInt] = mapped_column(nullable=False)
+    order_id: Mapped[int] = mapped_column(ForeignKey=True, nullable=False)
+
+    product_id:Mapped[int | None]=mapped_column(# it must have a product id because order item is related to one product
+        ForeingKey=True,
+        nullable=False
+    )
+    product: Mapped["Product"] = relationship( # just related to one product
+        back_populates="order_items"
+    )
+    order:Mapped["Order"]=relationship(# just related to one order
+        back_populates='items',
+
+    )
+
+    pass
