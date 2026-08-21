@@ -1,12 +1,13 @@
 from enum import Enum
 
-
+from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Enum as SQLEnum, String
+
+from nextkalaapi.models.base import Base
 
 
-class Base(DeclarativeBase):  # alchemy db model
-    pass
+
 
 
 class Role(str, Enum):

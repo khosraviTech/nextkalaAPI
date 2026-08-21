@@ -1,13 +1,10 @@
 from pydantic import PositiveInt
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import Mapped, String
-from nextkalaapi.models.order_model import Order
-from nextkalaapi.schemas.product import Product
+from sqlalchemy import ForeignKey, String
 
 
-class Base(DeclarativeBase):  # alchemy db model
-    pass
 
+from nextkalaapi.models.base import Base
 
 class OrderItem(Base):
     __tablename__ = "order_items"
@@ -17,10 +14,10 @@ class OrderItem(Base):
     price: Mapped[PositiveInt] = mapped_column(nullable=False)
     quantity: Mapped[PositiveInt] = mapped_column(nullable=False)
     total_item_price: Mapped[PositiveInt] = mapped_column(nullable=False)
-    order_id: Mapped[int] = mapped_column(ForeignKey="orders.id", nullable=False)
+    order_id: Mapped[int] = mapped_column(ForeignKey("orders.id"), nullable=False)
     product_id: Mapped[int] = (
         mapped_column(  # it must have a product id because order item is related to one product
-            ForeingKey=True, nullable=False
+            ForeignKey("products.id"), nullable=False
         )
     )
     product: Mapped["Product"] = relationship(  # just related to one product

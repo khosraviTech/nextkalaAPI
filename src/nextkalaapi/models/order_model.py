@@ -1,23 +1,21 @@
-from enum import Enum
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import   Mapped
-from nextkalaapi.models.order_item_model import OrderItem
 from datetime import UTC, datetime
+from enum import Enum
+
 from sqlalchemy import DateTime
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from nextkalaapi.models.base import Base
+from nextkalaapi.models.order_item_model import OrderItem
 
 
-class Base(DeclarativeBase):  # alchemy db model
-    pass
-
-
-class OrderStatus(Mapped[str], Enum):
+class OrderStatus(str, Enum):
     processing = "processing"
     cancelled = "cancelled"
     shipped = "shipped"
     delivered = "delivered"
 
 
-class PaymentStatus(Mapped[str], Enum):
+class PaymentStatus(str, Enum):
     pending = "pending"
     paid = "paid"
     failed = "failed"
@@ -26,9 +24,9 @@ class PaymentStatus(Mapped[str], Enum):
 class Order(Base):
     __tablename__ = "orders"
 
-    id: Mapped[Mapped[int]] = mapped_column(nullable=False, primary_key=True)
+    id: Mapped[int] = mapped_column(nullable=False, primary_key=True)
     user_id: Mapped[int] = mapped_column(nullable=False)
-    # TODO:cartItem or orderitem model for this problem of db design
+    
     items: Mapped[list[OrderItem]] = relationship(
         back_populates="order",
         cascade="all, delete-orphan",
@@ -45,4 +43,3 @@ class Order(Base):
         nullable=False,
     )
 
-    

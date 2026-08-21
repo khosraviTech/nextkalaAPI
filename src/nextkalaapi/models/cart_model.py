@@ -1,11 +1,8 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
+from nextkalaapi.models.base import Base
 from nextkalaapi.models.cart_item_model import CartItem
 from nextkalaapi.models.user_model import User
-
-
-class Base(DeclarativeBase):  # alchemy db model
-    pass
 
 
 class Cart(Base):

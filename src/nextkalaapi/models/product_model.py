@@ -1,16 +1,14 @@
-from enum import Enum
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import ARRAY, Enum as SQLEnum, String
+
+from sqlalchemy import ARRAY, String
+from sqlalchemy.orm import  Mapped, mapped_column, relationship
+
+from nextkalaapi.models.base import Base
 from nextkalaapi.models.tag_model import Tag
-from nextkalaapi.schemas.cart_item import CartItem
-
-
-class Base(DeclarativeBase):  # alchemy db model
-    pass
 
 
 class Product(Base):
     __tablename__ = "products"
+
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str] = mapped_column(String(300), nullable=False)
@@ -27,6 +25,6 @@ class Product(Base):
     minimumOrderQuantity: Mapped[int] = mapped_column(nullable=True)
     thumbnail: Mapped[str] = mapped_column(nullable=True)
 
-    tags: Mapped[list["Tag"]] = relationship(
+    tags: Mapped[list[Tag]] = relationship(
         secondary="product_tags", back_populates="products"
     )

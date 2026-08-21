@@ -1,13 +1,10 @@
-from enum import Enum
 
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import Enum as SQLEnum, String
-
+from nextkalaapi.models.base import Base
 from nextkalaapi.models.product_model import Product
 
-class Base(DeclarativeBase):#alchemy db model
-    pass
 
 class Tag(Base):
     __tablename__ = "tags"
@@ -21,7 +18,7 @@ class Tag(Base):
         index=True
     )
 
-    products: Mapped[list["Product"]] = relationship(
+    products: Mapped[list[Product]] = relationship(
         secondary="product_tags",
         back_populates="tags"
     )
