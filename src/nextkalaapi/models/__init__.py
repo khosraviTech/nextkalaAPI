@@ -6,7 +6,7 @@ from . import (
     order_item_model,
     order_model,
     product_model,
-    product_tags_model,
+    products_tags_table,
     tag_model,
     user_model,
 )

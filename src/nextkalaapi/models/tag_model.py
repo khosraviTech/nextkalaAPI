@@ -1,7 +1,7 @@
 
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from .product_tags_model import product_tags
+from .products_tags_table import product_tags
 from nextkalaapi.models.base import Base
 
 
@@ -18,7 +18,5 @@ class Tag(Base):
         index=True
     )
 
-    products: Mapped[list["Product"]] = relationship(
-        secondary=product_tags,
-        back_populates="tags"
-    )
+    # relationships:
+    # product M--M tag(many to many has no code in child class(tag is child here))

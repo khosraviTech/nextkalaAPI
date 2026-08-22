@@ -15,14 +15,13 @@ class OrderItem(Base):
     quantity: Mapped[PositiveInt] = mapped_column(nullable=False)
     total_item_price: Mapped[PositiveInt] = mapped_column(nullable=False)
     order_id: Mapped[int] = mapped_column(ForeignKey("orders.id"), nullable=False)
-    product_id: Mapped[int] = (
-        mapped_column(  # it must have a product id because order item is related to one product
-            ForeignKey("products.id"), nullable=False
-        )
-    )
+    
     product: Mapped["Product"] = relationship(  # just related to one product
         back_populates="order_items"
     )
     order: Mapped["Order"] = relationship(  # just related to one order
         back_populates="items",
     )
+    # relationships:
+    # product 1--M orderItem
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"), nullable=False) 

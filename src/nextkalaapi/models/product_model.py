@@ -1,7 +1,8 @@
 from sqlalchemy import ARRAY, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from .product_tags_model import product_tags
+
 from nextkalaapi.models.base import Base
+from nextkalaapi.models.products_tags_table import products_tags_table
 
 
 class Product(Base):
@@ -14,17 +15,13 @@ class Product(Base):
     price: Mapped[float] = mapped_column(nullable=False)
     brand: Mapped[str] = mapped_column(nullable=False)
     images: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False)
+    
+    # relationships:
+    # product 1--M cartItem
+    cart_items: Mapped[list["CartItem"]] = relationship(cascade="all , delete")
 
-    discountPercentage: Mapped[float] = mapped_column(nullable=True)
-    rating: Mapped[float] = mapped_column(nullable=True)
-    weight: Mapped[float] = mapped_column(nullable=True)
-    availabilityStatus: Mapped[str] = mapped_column(nullable=True)
-    returnPolicy: Mapped[str] = mapped_column(nullable=True)
-    minimumOrderQuantity: Mapped[int] = mapped_column(nullable=True)
-    thumbnail: Mapped[str] = mapped_column(nullable=True)
+    # product 1--M orderItem
+    order_items: Mapped[list["OrderItem"]] = relationship(cascade="all , delete-orphan")
 
-    tags: Mapped[list["Tag"]] = relationship(
-        secondary=product_tags, back_populates="products"
-    )
-    cart_items: Mapped[list["CartItem"]] = relationship(back_populates="product")
-    order_items: Mapped[list["OrderItem"]] = relationship(back_populates="product")
+    # product M--M tag
+    tags: Mapped[list["Tag"]] = relationship(secondary=products_tags_table)
