@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 from enum import Enum
 
-from sqlalchemy import DateTime
+from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from nextkalaapi.models.base import Base
@@ -25,12 +25,7 @@ class Order(Base):
     __tablename__ = "orders"
 
     id: Mapped[int] = mapped_column(nullable=False, primary_key=True)
-    user_id: Mapped[int] = mapped_column(nullable=False)
-    
-    items: Mapped[list[OrderItem]] = relationship(
-        back_populates="order",
-        cascade="all, delete-orphan",
-    )
+
     subtotal: Mapped[int] = mapped_column(nullable=False)
     shipping: Mapped[int] = mapped_column(nullable=False)
     tax: Mapped[int] = mapped_column(nullable=False)
@@ -42,4 +37,13 @@ class Order(Base):
         default=lambda: datetime.now(UTC),
         nullable=False,
     )
-
+    # relationships:
+    # order 1--M orderItem
+    order_items: Mapped[list[OrderItem]] = relationship(
+        cascade="all, delete",back_populates="order"
+    )
+    # user 1--M order
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"), ondelete="SET NULL", nullable=True
+    )
+    user: Mapped["User"] = relationship(back_populates="orders") # now can use : order.user

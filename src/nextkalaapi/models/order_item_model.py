@@ -11,17 +11,16 @@ class OrderItem(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(50), nullable=False)
-    price: Mapped[PositiveInt] = mapped_column(nullable=False)
+    unit_price: Mapped[PositiveInt] = mapped_column(nullable=False)
     quantity: Mapped[PositiveInt] = mapped_column(nullable=False)
-    total_item_price: Mapped[PositiveInt] = mapped_column(nullable=False)
-    order_id: Mapped[int] = mapped_column(ForeignKey("orders.id"), nullable=False)
+    total_price: Mapped[PositiveInt] = mapped_column(nullable=False)
     
-    product: Mapped["Product"] = relationship(  # just related to one product
-        back_populates="order_items"
-    )
-    order: Mapped["Order"] = relationship(  # just related to one order
-        back_populates="items",
-    )
+    
+   
+   
     # relationships:
     # product 1--M orderItem
     product_id: Mapped[int] = mapped_column(ForeignKey("products.id"), nullable=False) 
+    # order 1--M orderItem
+    order_id: Mapped[int] = mapped_column(ForeignKey("orders.id"), nullable=False)
+    order: Mapped["Order"] = relationship(back_populates="order_items")

@@ -31,4 +31,6 @@ class User(Base):
 
     # relationships:
     # cart 1--1 user
-    cart: Mapped["Cart"] = relationship(back_populates="user",cascade="all, delete", single_parent=True)
+    cart: Mapped["Cart"] = relationship(back_populates="user", single_parent=True)
+    # user 1--M order
+    orders: Mapped[list["Order"]] = relationship(back_populates="user")
