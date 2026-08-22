@@ -1,22 +1,26 @@
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from nextkalaapi.models.base import Base
-from nextkalaapi.models.cart_item_model import CartItem
-from nextkalaapi.models.user_model import User
 
 
 class Cart(Base):
     __tablename__ = "carts"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+
+    # relationships:
+
+    # cart 1--1 user
     user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id"),
         nullable=False,
         unique=True,
     )
+    user: Mapped["User"] = relationship(back_populates="cart", single_parent=True)
 
-    items: Mapped[list["CartItem"]] = relationship(
-        back_populates="cart", cascade="all, delete-orphan"
+    # cart 1--M cartItem
+    cart_items: Mapped[list["CartItem"]] = relationship(
+         cascade="all, delete"
     )
-    user: Mapped["User"] = relationship(back_populates="cart")
+    

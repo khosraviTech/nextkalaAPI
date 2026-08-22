@@ -11,7 +11,6 @@ class CartItem(Base):
     __tablename__ = "cart_items"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    cart_id: Mapped[int] = mapped_column(ForeignKey("carts.id"), nullable=False)
     product_id: Mapped[int] = mapped_column(ForeignKey("products.id"), nullable=False)
     title: Mapped[str] = mapped_column(nullable=False)
     price: Mapped[int] = mapped_column(nullable=False)
@@ -19,4 +18,8 @@ class CartItem(Base):
     totalItemPrice: Mapped[int] = mapped_column(nullable=False)
 
     product: Mapped[Product] = relationship(back_populates="cart_items")
-    cart: Mapped["Cart"] = relationship(back_populates="items")
+
+    # relationships:
+    # cart 1--M cartItem
+    cart_id: Mapped[int] = mapped_column(ForeignKey("carts.id"), nullable=False)
+    
