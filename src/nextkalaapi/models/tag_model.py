@@ -19,4 +19,5 @@ class Tag(Base):
     )
 
     # relationships:
-    # product M--M tag(many to many has no code in child class(tag is child here))
+    # product M--M tag
+    products: Mapped[list["Product"]] = relationship(secondary=products_tags_table,back_populates="tags")

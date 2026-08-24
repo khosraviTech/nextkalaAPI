@@ -24,4 +24,4 @@ class Product(Base):
     order_items: Mapped[list["OrderItem"]] = relationship(back_populates="product") #product.order_items 
 
     # product M--M tag
-    tags: Mapped[list["Tag"]] = relationship(secondary=products_tags_table)
+    tags: Mapped[list["Tag"]] = relationship(secondary=products_tags_table,back_populates="products")
