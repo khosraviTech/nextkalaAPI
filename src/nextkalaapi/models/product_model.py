@@ -21,7 +21,7 @@ class Product(Base):
     cart_items: Mapped[list["CartItem"]] = relationship(cascade="all , delete")
 
     # product 1--M orderItem
-    order_items: Mapped[list["OrderItem"]] = relationship(cascade="all , delete-orphan")
+    order_items: Mapped[list["OrderItem"]] = relationship(back_populates="product") #product.order_items 
 
     # product M--M tag
     tags: Mapped[list["Tag"]] = relationship(secondary=products_tags_table)

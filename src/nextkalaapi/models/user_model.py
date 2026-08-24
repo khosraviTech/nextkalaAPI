@@ -33,4 +33,4 @@ class User(Base):
     # cart 1--1 user
     cart: Mapped["Cart"] = relationship(back_populates="user", single_parent=True)
     # user 1--M order
-    orders: Mapped[list["Order"]] = relationship(back_populates="user")
+    orders: Mapped[list["Order"]] = relationship(back_populates="user")# now can use : user.order becase of back_populates

@@ -40,10 +40,10 @@ class Order(Base):
     # relationships:
     # order 1--M orderItem
     order_items: Mapped[list[OrderItem]] = relationship(
-        cascade="all, delete",back_populates="order"
+        cascade="all , delete-orphan",back_populates="order" #delete-orphan: It means I can use order.order_items.remove(item)
     )
     # user 1--M order
     user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id"), ondelete="SET NULL", nullable=True
     )
-    user: Mapped["User"] = relationship(back_populates="orders") # now can use : order.user
+    user: Mapped["User"] = relationship(back_populates="orders") # now can use : order.user becase of back_populates

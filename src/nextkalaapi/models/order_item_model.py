@@ -20,7 +20,8 @@ class OrderItem(Base):
    
     # relationships:
     # product 1--M orderItem
-    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"), nullable=False) 
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"), nullable=False)
+    product:Mapped['Product'] = relationship(back_populates='order_items') #order_item.product
     # order 1--M orderItem
     order_id: Mapped[int] = mapped_column(ForeignKey("orders.id"), nullable=False)
-    order: Mapped["Order"] = relationship(back_populates="order_items")
+    order: Mapped["Order"] = relationship(back_populates="order_items") #order_item.order
