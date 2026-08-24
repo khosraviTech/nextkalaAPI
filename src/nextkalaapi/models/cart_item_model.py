@@ -13,7 +13,7 @@ class CartItem(Base):
 
     # relationships:
     # cart 1--M cartItem
-    cart_id: Mapped[int] = mapped_column(ForeignKey("carts.id"), nullable=False)
+    cart_id: Mapped[int] = mapped_column(ForeignKey("carts.id"), nullable=False,index=True)
     cart: Mapped["Cart"] = relationship(back_populates="cart_items")
     # product 1--M cartItem
-    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"), nullable=False)
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"), nullable=False,index=True)

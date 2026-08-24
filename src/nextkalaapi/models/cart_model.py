@@ -14,7 +14,8 @@ class Cart(Base):
     # cart 1--1 user
     user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id"),
-        nullable=False
+        nullable=False,
+        index=True
         
     )
     user: Mapped["User"] = relationship(back_populates="cart", single_parent=True)

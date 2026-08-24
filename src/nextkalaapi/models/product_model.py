@@ -11,9 +11,9 @@ class Product(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str] = mapped_column(String(300), nullable=False)
-    category: Mapped[str] = mapped_column(String(50), nullable=False)
+    category: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
     price: Mapped[float] = mapped_column(nullable=False)
-    brand: Mapped[str] = mapped_column(nullable=False)
+    brand: Mapped[str] = mapped_column(nullable=False,index=True)
     images: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False)
     
     # relationships:

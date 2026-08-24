@@ -21,7 +21,7 @@ class User(Base):
     last_name: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False, index=True, unique=True)
     password: Mapped[str] = mapped_column(nullable=False)
-    address: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    address: Mapped[str] = mapped_column(String(255), nullable=False)
     role: Mapped[Role] = mapped_column(SQLEnum(Role), default=Role.USER, nullable=False)
 
     # nullable fields
