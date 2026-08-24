@@ -44,6 +44,6 @@ class Order(Base):
     )
     # user 1--M order
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id"), ondelete="SET NULL", nullable=True
+        ForeignKey("users.id")
     )
     user: Mapped["User"] = relationship(back_populates="orders") # now can use : order.user becase of back_populates

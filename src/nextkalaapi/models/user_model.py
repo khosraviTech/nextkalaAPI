@@ -31,6 +31,10 @@ class User(Base):
 
     # relationships:
     # cart 1--1 user
-    cart: Mapped["Cart"] = relationship(back_populates="user", single_parent=True)
+    cart: Mapped["Cart"] = relationship(
+        back_populates="user", cascade="all, delete-orphan", single_parent=True
+    )
     # user 1--M order
-    orders: Mapped[list["Order"]] = relationship(back_populates="user")# now can use : user.order becase of back_populates
+    orders: Mapped[list["Order"]] = relationship(
+        back_populates="user", cascade="delete-orphan" #user.remove(order)
+    )  # now can use : user.order becase of back_populates
