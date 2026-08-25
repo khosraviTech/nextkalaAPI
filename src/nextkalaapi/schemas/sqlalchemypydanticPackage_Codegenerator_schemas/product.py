@@ -21,20 +21,27 @@ def _is_recursion_validation_error(exc: ValidationError) -> bool:
 
 if TYPE_CHECKING:
     from . import CartItemRow
-    from . import UserRow
+    from . import OrderItemRow
+    from . import TagRow
 
 
-class CartSchema(BaseModel):
+class ProductSchema(BaseModel):
     id: int | None = Field(default=None)
-    user_id: int = Field(default=...)
+    title: str = Field(default=..., max_length=100)
+    description: str = Field(default=..., max_length=300)
+    category: str = Field(default=..., max_length=50)
+    price: float = Field(default=...)
+    brand: str = Field(default=...)
+    images: list[Any] = Field(default=...)
 
 
-class CartRow(CartSchema):
+class ProductRow(ProductSchema):
     id: int = Field(default=...)  # pyright: ignore[reportIncompatibleVariableOverride]
 
     # nested relationship objects
-    items: list[CartItemRow] = []
-    user: UserRow | None = None
+    cart_items: list[CartItemRow] = []
+    order_items: list[OrderItemRow] = []
+    tags: list[TagRow] = []
 
     @model_validator(mode="before")
     @classmethod
@@ -53,9 +60,9 @@ class CartRow(CartSchema):
                 continue
         return data
 
-    @field_validator("items", mode="wrap")
+    @field_validator("cart_items", mode="wrap")
     @classmethod
-    def _drop_cyclic_items(
+    def _drop_cyclic_cart_items(
         cls, value: Any, handler: Callable[[Any], Any]
     ) -> Any | None:
         try:
@@ -71,22 +78,46 @@ class CartRow(CartSchema):
                     continue
             return pruned
 
-    @field_validator("user", mode="wrap")
+    @field_validator("order_items", mode="wrap")
     @classmethod
-    def _drop_cyclic_user(cls, value: Any, handler: Callable[[Any], Any]) -> Any | None:
+    def _drop_cyclic_order_items(
+        cls, value: Any, handler: Callable[[Any], Any]
+    ) -> Any | None:
         try:
             return handler(value)
         except ValidationError as exc:
             if not _is_recursion_validation_error(exc):
                 raise
-            return None
+            pruned: list[Any] = []
+            for item in value or []:  # pyright: ignore[reportUnknownVariableType]
+                try:
+                    pruned.extend(handler([item]))
+                except ValidationError:
+                    continue
+            return pruned
+
+    @field_validator("tags", mode="wrap")
+    @classmethod
+    def _drop_cyclic_tags(cls, value: Any, handler: Callable[[Any], Any]) -> Any | None:
+        try:
+            return handler(value)
+        except ValidationError as exc:
+            if not _is_recursion_validation_error(exc):
+                raise
+            pruned: list[Any] = []
+            for item in value or []:  # pyright: ignore[reportUnknownVariableType]
+                try:
+                    pruned.extend(handler([item]))
+                except ValidationError:
+                    continue
+            return pruned
 
     model_config = ConfigDict(from_attributes=True)
 
 
-class CartInsert(CartSchema):
+class ProductInsert(ProductSchema):
     pass
 
 
-class CartUpdate(CartSchema):
+class ProductUpdate(ProductSchema):
     pass

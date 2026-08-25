@@ -23,31 +23,15 @@ if TYPE_CHECKING:
     from . import CartRow
 
 
-class UserSchema(BaseModel):
+class CartItemSchema(BaseModel):
     id: int | None = Field(default=None)
-    first_name: str = Field(default=...)
-    last_name: str = Field(default=...)
-    email: str = Field(default=...)
-    password: str = Field(default=...)
-    address: str = Field(default=..., max_length=255)
-    role: str | None = Field(default=None, max_length=9)
-    age: int | None = Field(default=None)
-    gender: bool | None = Field(default=None)
-    phone: str | None = Field(default=None)
-    username: str | None = Field(default=None)
-    birth_date: str | None = Field(default=None)
-    image: str | None = Field(default=None)
-    blood_group: str | None = Field(default=None)
-    height: float | None = Field(default=None)
-    weight: float | None = Field(default=None)
-    ip: str | None = Field(default=None)
-    mac_address: str | None = Field(default=None)
-    university: str | None = Field(default=None)
-    bank: str | None = Field(default=None)
-    company: str | None = Field(default=None)
+    quantity: int = Field(default=...)
+    product_title: str = Field(default=..., max_length=100)
+    cart_id: int = Field(default=...)
+    product_id: int = Field(default=...)
 
 
-class UserRow(UserSchema):
+class CartItemRow(CartItemSchema):
     id: int = Field(default=...)  # pyright: ignore[reportIncompatibleVariableOverride]
 
     # nested relationship objects
@@ -83,9 +67,9 @@ class UserRow(UserSchema):
     model_config = ConfigDict(from_attributes=True)
 
 
-class UserInsert(UserSchema):
+class CartItemInsert(CartItemSchema):
     pass
 
 
-class UserUpdate(UserSchema):
+class CartItemUpdate(CartItemSchema):
     pass

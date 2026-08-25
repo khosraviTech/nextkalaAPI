@@ -1,3 +1,4 @@
+#  uv run sqlalchemy-pydantic-codegen --models-path nextkalaapi.models --output-dir src\nextkalaapi\pydantic_schemas           
 """Auto-generated Pydantic schemas"""
 
 __all__ = [

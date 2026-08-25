@@ -20,26 +20,21 @@ def _is_recursion_validation_error(exc: ValidationError) -> bool:
 
 
 if TYPE_CHECKING:
-    from . import ProductRow
-    from . import CartRow
+    from . import UserRow
+    from . import CartItemRow
 
 
-class CartItemSchema(BaseModel):
+class CartSchema(BaseModel):
     id: int | None = Field(default=None)
-    cart_id: int = Field(default=...)
-    product_id: int = Field(default=...)
-    title: str = Field(default=...)
-    price: int = Field(default=...)
-    quantity: int = Field(default=...)
-    totalItemPrice: int = Field(default=...)
+    user_id: int = Field(default=...)
 
 
-class CartItemRow(CartItemSchema):
+class CartRow(CartSchema):
     id: int = Field(default=...)  # pyright: ignore[reportIncompatibleVariableOverride]
 
     # nested relationship objects
-    product: ProductRow | None = None
-    cart: CartRow | None = None
+    user: UserRow | None = None
+    cart_items: list[CartItemRow] = []
 
     @model_validator(mode="before")
     @classmethod
@@ -58,9 +53,19 @@ class CartItemRow(CartItemSchema):
                 continue
         return data
 
-    @field_validator("product", mode="wrap")
+    @field_validator("user", mode="wrap")
     @classmethod
-    def _drop_cyclic_product(
+    def _drop_cyclic_user(cls, value: Any, handler: Callable[[Any], Any]) -> Any | None:
+        try:
+            return handler(value)
+        except ValidationError as exc:
+            if not _is_recursion_validation_error(exc):
+                raise
+            return None
+
+    @field_validator("cart_items", mode="wrap")
+    @classmethod
+    def _drop_cyclic_cart_items(
         cls, value: Any, handler: Callable[[Any], Any]
     ) -> Any | None:
         try:
@@ -68,24 +73,20 @@ class CartItemRow(CartItemSchema):
         except ValidationError as exc:
             if not _is_recursion_validation_error(exc):
                 raise
-            return None
-
-    @field_validator("cart", mode="wrap")
-    @classmethod
-    def _drop_cyclic_cart(cls, value: Any, handler: Callable[[Any], Any]) -> Any | None:
-        try:
-            return handler(value)
-        except ValidationError as exc:
-            if not _is_recursion_validation_error(exc):
-                raise
-            return None
+            pruned: list[Any] = []
+            for item in value or []:  # pyright: ignore[reportUnknownVariableType]
+                try:
+                    pruned.extend(handler([item]))
+                except ValidationError:
+                    continue
+            return pruned
 
     model_config = ConfigDict(from_attributes=True)
 
 
-class CartItemInsert(CartItemSchema):
+class CartInsert(CartSchema):
     pass
 
 
-class CartItemUpdate(CartItemSchema):
+class CartUpdate(CartSchema):
     pass

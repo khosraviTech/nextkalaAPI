@@ -27,11 +27,11 @@ if TYPE_CHECKING:
 class OrderItemSchema(BaseModel):
     id: int | None = Field(default=None)
     title: str = Field(default=..., max_length=50)
-    price: int = Field(default=...)
+    unit_price: int = Field(default=...)
     quantity: int = Field(default=...)
-    total_item_price: int = Field(default=...)
-    order_id: int = Field(default=...)
+    total_price: int = Field(default=...)
     product_id: int = Field(default=...)
+    order_id: int = Field(default=...)
 
 
 class OrderItemRow(OrderItemSchema):

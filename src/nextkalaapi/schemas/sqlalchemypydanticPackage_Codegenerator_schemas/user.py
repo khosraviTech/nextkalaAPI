@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import datetime
 from typing import TYPE_CHECKING, Any, Callable
 
 from pydantic import (
@@ -21,26 +20,29 @@ def _is_recursion_validation_error(exc: ValidationError) -> bool:
 
 
 if TYPE_CHECKING:
-    from . import OrderItemRow
+    from . import CartRow
+    from . import OrderRow
 
 
-class OrderSchema(BaseModel):
+class UserSchema(BaseModel):
     id: int | None = Field(default=None)
-    user_id: int = Field(default=...)
-    subtotal: int = Field(default=...)
-    shipping: int = Field(default=...)
-    tax: int = Field(default=...)
-    total: int = Field(default=...)
-    paymentStatus: str | None = Field(default=None, max_length=7)
-    orderStatus: str | None = Field(default=None, max_length=10)
-    created_at: datetime.datetime | None = Field(default=None)
+    first_name: str = Field(default=...)
+    last_name: str = Field(default=...)
+    email: str = Field(default=...)
+    password: str = Field(default=...)
+    address: str = Field(default=..., max_length=255)
+    role: str | None = Field(default=None, max_length=9)
+    age: int | None = Field(default=None)
+    gender: bool | None = Field(default=None)
+    image: str | None = Field(default=None)
 
 
-class OrderRow(OrderSchema):
+class UserRow(UserSchema):
     id: int = Field(default=...)  # pyright: ignore[reportIncompatibleVariableOverride]
 
     # nested relationship objects
-    items: list[OrderItemRow] = []
+    cart: CartRow | None = None
+    orders: list[OrderRow] = []
 
     @model_validator(mode="before")
     @classmethod
@@ -59,9 +61,19 @@ class OrderRow(OrderSchema):
                 continue
         return data
 
-    @field_validator("items", mode="wrap")
+    @field_validator("cart", mode="wrap")
     @classmethod
-    def _drop_cyclic_items(
+    def _drop_cyclic_cart(cls, value: Any, handler: Callable[[Any], Any]) -> Any | None:
+        try:
+            return handler(value)
+        except ValidationError as exc:
+            if not _is_recursion_validation_error(exc):
+                raise
+            return None
+
+    @field_validator("orders", mode="wrap")
+    @classmethod
+    def _drop_cyclic_orders(
         cls, value: Any, handler: Callable[[Any], Any]
     ) -> Any | None:
         try:
@@ -80,9 +92,9 @@ class OrderRow(OrderSchema):
     model_config = ConfigDict(from_attributes=True)
 
 
-class OrderInsert(OrderSchema):
+class UserInsert(UserSchema):
     pass
 
 
-class OrderUpdate(OrderSchema):
+class UserUpdate(UserSchema):
     pass
