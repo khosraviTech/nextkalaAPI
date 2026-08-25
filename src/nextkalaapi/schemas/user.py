@@ -1,111 +1,100 @@
-from enum import Enum
+from __future__ import annotations
 
-from pydantic import BaseModel
+from typing import TYPE_CHECKING, Any, Callable
 
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    model_validator,
+    field_validator,
+    ValidationError,
+)
 
-# user update
-class UserInfoUpdate(BaseModel):
-    first_name: str
-    last_name: str
-    email: str
-
-# user update
-class UserPasswordUpdate(BaseModel):
-    password: str
-
-
-# user create
-class UserCreate(BaseModel):
-    first_name: str
-    last_name: str
-    email: str
-    username: str
-    password: str
-
-# user response (read & delete)
-class UserResponse(BaseModel):
-    first_name: str
-    last_name: str
-    email: str
-
-class User(BaseModel):
-    id: int
-    first_name: str
-    last_name: str
-    email: str
-    password: str 
-    maiden_name: str | None = None
-    age: int | None = None
-    gender: Gender | None = None
-    phone: str | None = None
-    username: str | None = None
-    birth_date: str | None = None
-    image: str | None = None
-    blood_group: str | None = None
-    height: float | None = None
-    weight: float | None = None
-    eye_color: str | None = None
-    hair: Hair | None = None
-    ip: str | None = None
-    address: Address | None = None
-    mac_address: str | None = None
-    university: str | None = None
-    bank: Bank | None = None
-    company: Company | None = None
-    ein: str | None = None
-    ssn: str | None = None
-    user_agent: str | None = None
-    crypto: Crypto | None = None
-    role: Role | None = None
+from sqlalchemy.exc import MissingGreenlet
 
 
-class Gender(str, Enum):
-    MALE = "male"
-    FEMALE = "female"
+def _is_recursion_validation_error(exc: ValidationError) -> bool:
+    errs = exc.errors()
+    return len(errs) == 1 and errs[0]["type"] == "recursion_loop"
 
 
-class Role(str, Enum):
-    ADMIN = "admin"
-    MODERATOR = "moderator"
-    USER = "user"
+if TYPE_CHECKING:
+    from . import CartRow
+    from . import OrderRow
 
 
-class Coordinates(BaseModel):
-    lat: float
-    lng: float
+class UserSchema(BaseModel):
+    id: int | None = Field(default=None)
+    first_name: str = Field(default=...)
+    last_name: str = Field(default=...)
+    email: str = Field(default=...)
+    password: str = Field(default=...)
+    address: str = Field(default=..., max_length=255)
+    role: str | None = Field(default=None, max_length=9)
+    age: int | None = Field(default=None)
+    gender: bool | None = Field(default=None)
+    image: str | None = Field(default=None)
 
 
-class Address(BaseModel):
-    address: str
-    city: str
-    state: str
-    state_code: str
-    postal_code: str
-    coordinates: Coordinates
-    country: str
+class UserRow(UserSchema):
+    id: int = Field(default=...)  # pyright: ignore[reportIncompatibleVariableOverride]
+
+    # nested relationship objects
+    cart: CartRow | None = None
+    orders: list[OrderRow] = []
+
+    @model_validator(mode="before")
+    @classmethod
+    def _extract_attrs(cls, obj: Any) -> dict[str, Any]:
+        if isinstance(obj, dict):
+            return obj  # pyright: ignore[reportUnknownVariableType]
+        data: dict[str, Any] = {}
+        for name, _ in cls.model_fields.items():
+            try:
+                data[name] = getattr(obj, name)
+            except MissingGreenlet:
+                # relationship wasn’t loaded — leave at the schema’s default
+                continue
+            except Exception:
+                # any other getattr‑error: skip too
+                continue
+        return data
+
+    @field_validator("cart", mode="wrap")
+    @classmethod
+    def _drop_cyclic_cart(cls, value: Any, handler: Callable[[Any], Any]) -> Any | None:
+        try:
+            return handler(value)
+        except ValidationError as exc:
+            if not _is_recursion_validation_error(exc):
+                raise
+            return None
+
+    @field_validator("orders", mode="wrap")
+    @classmethod
+    def _drop_cyclic_orders(
+        cls, value: Any, handler: Callable[[Any], Any]
+    ) -> Any | None:
+        try:
+            return handler(value)
+        except ValidationError as exc:
+            if not _is_recursion_validation_error(exc):
+                raise
+            pruned: list[Any] = []
+            for item in value or []:  # pyright: ignore[reportUnknownVariableType]
+                try:
+                    pruned.extend(handler([item]))
+                except ValidationError:
+                    continue
+            return pruned
+
+    model_config = ConfigDict(from_attributes=True)
 
 
-class Hair(BaseModel):
-    color: str
-    type: str
+class UserInsert(UserSchema):
+    pass
 
 
-class Bank(BaseModel):
-    card_expire: str
-    card_number: str
-    card_type: str
-    currency: str
-    iban: str
-
-
-class Company(BaseModel):
-    department: str
-    name: str
-    title: str
-    address: Address
-
-
-class Crypto(BaseModel):
-    coin: str
-    wallet: str
-    network: str
+class UserUpdate(UserSchema):
+    pass
