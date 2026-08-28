@@ -36,5 +36,5 @@ class User(Base):
     )
     # user 1--M order
     orders: Mapped[list["Order"]] = relationship(
-        back_populates="user", cascade="delete-orphan" #user.remove(order)
+        back_populates="user", cascade="all, delete-orphan" #user.remove(order)
     )  # now can use : user.order becase of back_populates
