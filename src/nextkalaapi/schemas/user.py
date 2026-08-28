@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from enum import Enum
 from typing import TYPE_CHECKING, Any, Callable
 
 from pydantic import (
@@ -23,6 +24,10 @@ if TYPE_CHECKING:
     from . import CartRow
     from . import OrderRow
 
+class Role(str, Enum):
+    ADMIN = "admin"
+    MODERATOR = "moderator"
+    USER = "user"
 
 class UserSchema(BaseModel):
     id: int | None = Field(default=None)
@@ -31,7 +36,7 @@ class UserSchema(BaseModel):
     email: str = Field(default=...)
     password: str = Field(default=...)
     address: str = Field(default=..., max_length=255)
-    role: str | None = Field(default=None, max_length=9)
+    role: Role | None = Field(default=Role.USER)
     age: int | None = Field(default=None)
     gender: bool | None = Field(default=None)
     image: str | None = Field(default=None)
@@ -92,9 +97,19 @@ class UserRow(UserSchema):
     model_config = ConfigDict(from_attributes=True)
 
 
+
 class UserInsert(UserSchema):
     pass
 
 
-class UserUpdate(UserSchema):
-    pass
+class UserUpdate(BaseModel):
+    first_name: str | None = None
+    last_name: str | None = None 
+    email: str | None = None 
+    password: str | None = None
+    address: str | None = Field(default=None, max_length=255)
+    role: Role | None = Field(default=Role.USER)
+    age: int | None = None
+    gender: bool | None = None 
+    image: str | None = None
+    
