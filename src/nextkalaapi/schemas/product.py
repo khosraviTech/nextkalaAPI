@@ -119,5 +119,30 @@ class ProductInsert(ProductSchema):
     pass
 
 
-class ProductUpdate(ProductSchema):
-    pass
+class ProductUpdate(BaseModel):
+    id: int = Field(default=...)
+    title: str | None = None
+    description: str | None = None
+    category: str | None = None
+    price: float | None = None
+    brand: str | None = None
+    images: list[Any] | None = None
+
+
+class ProductDelete(BaseModel):
+    id: int = Field(default=...)
+
+
+class ProductSearch(BaseModel):
+    title: str | None = None
+    category: str | None = None
+    brand: str | None = None
+    min_price: float | None = None
+    max_price: float | None = None
+
+
+class ProductFilter(BaseModel):
+    category: str | None = None
+    brand: str | None = None
+    min_price: float | None = None
+    max_price: float | None = None

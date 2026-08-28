@@ -89,5 +89,16 @@ class OrderItemInsert(OrderItemSchema):
     pass
 
 
-class OrderItemUpdate(OrderItemSchema):
-    pass
+class OrderItemUpdate(BaseModel):
+    id: int = Field(default=...)
+    title: str |None =None
+    unit_price: int |None =None
+    quantity: int |None =None
+    total_price: int |None =None
+    product_id: int = Field(default=...)
+    order_id: int = Field(default=...)
+
+class OrderItemDeleteAll(BaseModel):
+    id: int = Field(default=...)
+
+

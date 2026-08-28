@@ -24,10 +24,12 @@ if TYPE_CHECKING:
     from . import CartRow
     from . import OrderRow
 
+
 class Role(str, Enum):
     ADMIN = "admin"
     MODERATOR = "moderator"
     USER = "user"
+
 
 class UserSchema(BaseModel):
     id: int | None = Field(default=None)
@@ -97,19 +99,31 @@ class UserRow(UserSchema):
     model_config = ConfigDict(from_attributes=True)
 
 
-
 class UserInsert(UserSchema):
     pass
 
 
 class UserUpdate(BaseModel):
+    id: int = Field(default=...)
     first_name: str | None = None
-    last_name: str | None = None 
-    email: str | None = None 
+    last_name: str | None = None
+    email: str | None = None
     password: str | None = None
     address: str | None = Field(default=None, max_length=255)
     role: Role | None = Field(default=Role.USER)
     age: int | None = None
-    gender: bool | None = None 
+    gender: bool | None = None
     image: str | None = None
-    
+
+
+class UserLogin(BaseModel):
+    email: str = Field(default=...)
+    password: str = Field(default=...)
+
+
+class UserRegister(UserSchema):
+    pass
+
+
+class UserDelete(BaseModel):
+    id: int = Field(default=...)

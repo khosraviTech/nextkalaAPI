@@ -88,5 +88,4 @@ class CartInsert(CartSchema):
     pass
 
 
-class CartUpdate(CartSchema):
-    pass
+

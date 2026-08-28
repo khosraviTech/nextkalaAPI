@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+from enum import Enum
 from typing import TYPE_CHECKING, Any, Callable
 
 from pydantic import (
@@ -23,6 +24,19 @@ def _is_recursion_validation_error(exc: ValidationError) -> bool:
 if TYPE_CHECKING:
     from . import OrderItemRow
     from . import UserRow
+
+
+class OrderStatus(str, Enum):
+    processing = "processing"
+    cancelled = "cancelled"
+    shipped = "shipped"
+    delivered = "delivered"
+
+
+class PaymentStatus(str, Enum):
+    pending = "pending"
+    paid = "paid"
+    failed = "failed"
 
 
 class OrderSchema(BaseModel):
@@ -96,5 +110,17 @@ class OrderInsert(OrderSchema):
     pass
 
 
-class OrderUpdate(OrderSchema):
-    pass
+class OrderUpdate(BaseModel):
+    id: int = Field(default=...)
+    subtotal: int | None = None
+    shipping: int | None = None
+    tax: int | None = None
+    total: int | None = None
+    paymentStatus: PaymentStatus | None = Field(default=PaymentStatus.pending)
+    orderStatus: OrderStatus | None = Field(default=OrderStatus.processing)
+    created_at: datetime.datetime | None = Field(default=None)
+    user_id: int | None = Field(default=...)
+
+
+class OrderDelete(BaseModel):
+    id: int = Field(default=...)

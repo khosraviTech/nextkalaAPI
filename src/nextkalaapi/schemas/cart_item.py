@@ -71,5 +71,13 @@ class CartItemInsert(CartItemSchema):
     pass
 
 
-class CartItemUpdate(CartItemSchema):
-    pass
+class CartItemUpdate(BaseModel):
+    id: int = Field(default=...)
+    quantity: int | None = None
+    product_title: str | None = None
+    cart_id: int = Field(default=...)
+    product_id: int = Field(default=...)
+
+
+class CartItemDelete(BaseModel):
+    id: int = Field(default=...)

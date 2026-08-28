@@ -76,5 +76,11 @@ class TagInsert(TagSchema):
     pass
 
 
-class TagUpdate(TagSchema):
+class TagUpdate(BaseModel):
+    id: int = Field(default=...)
+    name: str | None = None
     pass
+
+
+class TagDelete(BaseModel):
+    id: int = Field(default=...)
