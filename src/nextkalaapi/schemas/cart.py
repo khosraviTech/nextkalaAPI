@@ -89,3 +89,9 @@ class CartInsert(CartSchema):
 
 
 
+class CartUpdate(CartSchema):
+
+    id: int = Field(default=...)  # pyright: ignore[reportIncompatibleVariableOverride]
+    # nested relationship objects
+    user: UserRow | None = None
+    cart_items: list[CartItemRow] | None = []
