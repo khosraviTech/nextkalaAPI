@@ -19,7 +19,6 @@ def get_users(db: Session) -> list[User]:
 # create
 def create_user(db: Session, user: User) -> User:
     db.add(user)
-    db.flush()
     db.commit()
     db.refresh(user)
 

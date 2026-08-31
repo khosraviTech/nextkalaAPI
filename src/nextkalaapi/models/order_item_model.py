@@ -1,10 +1,9 @@
 from pydantic import PositiveInt
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, String
-
-
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from nextkalaapi.models.base import Base
+
 
 class OrderItem(Base):
     __tablename__ = "order_items"

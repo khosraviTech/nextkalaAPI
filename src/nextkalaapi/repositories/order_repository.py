@@ -19,7 +19,6 @@ def get_orders(db: Session) -> list[Order] | None:
 # create
 def create_order(db: Session, order: Order) -> Order:
     db.add(order)
-    db.flush()
     db.commit()
     db.refresh(order)
 
