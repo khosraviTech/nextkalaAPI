@@ -1,4 +1,3 @@
-from psycopg.errors import SerializationFailure
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
