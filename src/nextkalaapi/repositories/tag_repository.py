@@ -5,7 +5,7 @@ from nextkalaapi.models.tag_model import Tag
 
 
 # read
-def get_tag(db: Session, tag_id: int) -> int | None:
+def get_tag(db: Session, tag_id: int) -> Tag | None:
     stmt = select(Tag).where(Tag.id == tag_id)
     return db.scalar(stmt)
 
