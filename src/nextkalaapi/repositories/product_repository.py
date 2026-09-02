@@ -10,6 +10,11 @@ def get_product(db: Session, product_id) -> Product | None:
     return db.scalar(stmt)
 
 
+def get_products(db: Session) -> list[Product]:
+    stmt = select(Product)
+    return list(db.scalars(stmt).all())
+
+
 # create
 def create_product(db: Session, product: Product) -> Product:
     db.add(product)

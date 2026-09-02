@@ -10,6 +10,10 @@ def get_product(db: Session, product_id: int) -> Product | None:
     return product_repository.get_product(db, product_id)
 
 
+def get_products(db: Session) -> list[Product]:
+    return product_repository.get_products(db)
+
+
 # create
 def create_product(db: Session, product_data: ProductInsert) -> Product:
     return product_repository.create_product(db, **product_data.model_dump())
