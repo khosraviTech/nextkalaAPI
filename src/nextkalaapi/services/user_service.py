@@ -37,7 +37,7 @@ def update_user(
 
     for field, value in update_data.items():
         if field != "id":
-            setattr(user, field, value)
+            setattr(user, field, value)#it means: user.field = value
 
     return user_repository.update_user(db, user)
 
