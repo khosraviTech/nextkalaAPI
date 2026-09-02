@@ -34,4 +34,4 @@ def update_tag(db: Session, tag_id: int, tag_data: TagUpdate) -> Tag | None:
 
 # delete
 def delete_tag(db: Session, tag_id: int) -> int | None:
-    return tag_repository.delete_tag(tag_id)
+    return tag_repository.delete_tag(db,tag_id)
