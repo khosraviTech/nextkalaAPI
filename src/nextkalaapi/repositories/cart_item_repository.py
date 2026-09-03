@@ -17,10 +17,10 @@ def get_cart_items(db: Session) -> list[CartItem] | None:
 
 
 # read by cart id
-def get_cart_item_by_cart_id(db: Session, cart_id: int) -> CartItem | None:
+def get_cart_item_by_cart_id(db: Session, cart_id: int) -> list[CartItem] | None:
     stmt = select(CartItem).where(CartItem.cart_id == cart_id)
 
-    return db.scalar(stmt)
+    return list(db.scalars(stmt).all())
 
 
 # read by product id

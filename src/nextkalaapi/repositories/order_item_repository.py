@@ -1,4 +1,4 @@
-from sqlalchemy import Select, select
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from nextkalaapi.models.order_item_model import OrderItem
@@ -17,9 +17,9 @@ def get_order_items(db: Session) -> list[OrderItem] | None:
 
 
 # read by order id
-def get_order_item_by_order_id(db: Session, order_id: int) -> OrderItem | None:
+def get_order_item_by_order_id(db: Session, order_id: int) -> list[OrderItem] | None:
     stmt = select(OrderItem).where(OrderItem.order_id == order_id)
-    return db.scalar(stmt)
+    return list(db.scalars(stmt).all())
 
 
 # read by product id
