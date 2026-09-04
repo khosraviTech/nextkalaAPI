@@ -26,8 +26,9 @@ def create_tag(db: Session, tag: Tag) -> Tag:
 
 # update
 def update_tag(db: Session, tag: Tag) -> Tag:
-    db.refresh(tag)
     db.commit()
+    db.refresh(tag)
+    
     return tag
 
 

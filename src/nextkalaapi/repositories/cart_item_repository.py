@@ -41,8 +41,9 @@ def create_cart_item(db: Session, cart_item: CartItem) -> CartItem:
 
 # Update
 def update_cart_item(db: Session, cart_item: CartItem) -> CartItem:
-    db.refresh(cart_item)
     db.commit()
+    db.refresh(cart_item)
+    
 
     return cart_item
 

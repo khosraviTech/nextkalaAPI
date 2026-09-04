@@ -38,8 +38,9 @@ def create_order_item(db: Session, order_item: OrderItem) -> OrderItem:
 
 # update
 def update_order_item(db: Session, order_item: OrderItem) -> OrderItem:
-    db.refresh(order_item)
     db.commit()
+    db.refresh(order_item)
+    
 
     return order_item
 

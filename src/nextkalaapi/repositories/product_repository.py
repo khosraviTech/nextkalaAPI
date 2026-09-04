@@ -26,8 +26,9 @@ def create_product(db: Session, product: Product) -> Product:
 
 # update
 def update_product(db: Session, product: Product) -> Product:
-    db.refresh(product)
     db.commit()
+    db.refresh(product)
+    
 
     return product
 

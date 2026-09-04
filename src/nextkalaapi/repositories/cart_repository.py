@@ -34,8 +34,9 @@ def create_cart(db: Session, cart: Cart) -> Cart:
 
 # update
 def update_cart(db: Session, cart: Cart) -> Cart:
-    db.refresh(cart)
     db.commit()
+    db.refresh(cart)
+    
 
     return cart
 

@@ -26,8 +26,9 @@ def create_order(db: Session, order: Order) -> Order:
 
 # update
 def update_order(db: Session, order: Order) -> Order:
-    db.refresh(order)
     db.commit()
+    db.refresh(order)
+    
 
     return order
 
