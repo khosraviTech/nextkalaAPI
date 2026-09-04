@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from nextkalaapi.database import get_db
-from nextkalaapi.schemas.user import UserRow, UserSchema
+from nextkalaapi.schemas.user import UserInsert, UserRow, UserSchema
 from nextkalaapi.services import user_service
 
 router = APIRouter()
@@ -25,3 +25,15 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 @router.get("/all", response_model=list[UserSchema])
 def read_users(db: Session = Depends(get_db)):
     return user_service.get_users(db)
+
+# create user
+@router.post(
+    "/create_user",
+    response_model=UserRow,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_user(
+    user_data: UserInsert,
+    db: Session = Depends(get_db),
+):
+    return user_service.create_user(db,user_data)
