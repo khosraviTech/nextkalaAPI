@@ -1,10 +1,27 @@
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
 
-from fastapi import APIRouter
-
+from nextkalaapi.database import get_db
+from nextkalaapi.schemas.user import UserRow, UserSchema
+from nextkalaapi.services import user_service
 
 router = APIRouter()
 
-# TODO:implimetn read_user route handler
-@router.get("", )
-def read_users():
-    pass
+
+# read user by id
+@router.get("/user_id/{user_id}", response_model=UserRow)
+def read_user(user_id: int, db: Session = Depends(get_db)):
+    user = user_service.get_user(db, user_id)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User by id {user_id} not found",
+        )
+
+    return user
+
+
+# read all users
+@router.get("/all", response_model=list[UserSchema])
+def read_users(db: Session = Depends(get_db)):
+    return user_service.get_users(db)
