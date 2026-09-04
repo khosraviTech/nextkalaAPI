@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from nextkalaapi.database import get_db
-from nextkalaapi.schemas.user import UserInsert, UserRow, UserSchema
+from nextkalaapi.schemas.user import UserInsert, UserRow, UserSchema, UserUpdate
 from nextkalaapi.services import user_service
 
 router = APIRouter()
@@ -37,3 +37,23 @@ def create_user(
     db: Session = Depends(get_db),
 ):
     return user_service.create_user(db,user_data)
+
+# update user
+@router.patch(
+    "/update_user/user_id/{user_id}",
+    response_model=UserRow,
+
+)
+def update_user(
+    user_id:int,
+    user_data:UserUpdate,
+    db:Session=Depends(get_db)
+):
+    user = user_service.update_user(db,user_id,user_data)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User by id {user_id} not found",
+        )
+    return user
+    

@@ -31,8 +31,9 @@ def update_user(
 ) -> (
     User
 ):  # changes will happen in Service layer: user_repository.update_user(db, user)
-    db.refresh(user)
     db.commit()
+    db.refresh(user)
+    
     return user
 
 
