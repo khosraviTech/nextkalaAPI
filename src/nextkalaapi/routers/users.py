@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from nextkalaapi.database import get_db
-from nextkalaapi.schemas.user import UserInsert, UserRow, UserSchema, UserUpdate
+from nextkalaapi.schemas.user import UserDelete, UserInsert, UserRow, UserSchema, UserUpdate
 from nextkalaapi.services import user_service
 
 router = APIRouter()
@@ -22,13 +22,13 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 
 # read all users
-@router.get("/all", response_model=list[UserSchema])
+@router.get("/all", response_model=list[UserRow])
 def read_users(db: Session = Depends(get_db)):
     return user_service.get_users(db)
 
 # create user
 @router.post(
-    "/create_user",
+    "/create",
     response_model=UserRow,
     status_code=status.HTTP_201_CREATED,
 )
@@ -40,7 +40,7 @@ def create_user(
 
 # update user
 @router.patch(
-    "/update_user/user_id/{user_id}",
+    "/update/user_id/{user_id}",
     response_model=UserRow,
 
 )
@@ -56,4 +56,6 @@ def update_user(
             detail=f"User by id {user_id} not found",
         )
     return user
+
+
     
