@@ -32,7 +32,7 @@ class Role(str, Enum):
 
 
 class UserSchema(BaseModel):
-    id: int | None = Field(default=None)
+    # id: int | None = Field(default=None)
     first_name: str = Field(default=...)
     last_name: str = Field(default=...)
     email: str = Field(default=...)
