@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 
 
 class ProductSchema(BaseModel):
-    id: int | None = Field(default=None)
+    # id: int | None = Field(default=None)
     title: str = Field(default=..., max_length=100)
     description: str = Field(default=..., max_length=300)
     category: str = Field(default=..., max_length=50)

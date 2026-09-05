@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 
 
 class OrderItemSchema(BaseModel):
-    id: int | None = Field(default=None)
+    # id: int | None = Field(default=None)
     title: str = Field(default=..., max_length=50)
     unit_price: int = Field(default=...)
     quantity: int = Field(default=...)

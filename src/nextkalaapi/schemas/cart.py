@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 
 
 class CartSchema(BaseModel):
-    id: int | None = Field(default=None)
+    # id: int | None = Field(default=None)
     user_id: int = Field(default=...)
 
 

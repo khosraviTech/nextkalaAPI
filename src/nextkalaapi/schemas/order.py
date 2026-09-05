@@ -40,7 +40,7 @@ class PaymentStatus(str, Enum):
 
 
 class OrderSchema(BaseModel):
-    id: int | None = Field(default=None)
+    # id: int | None = Field(default=None)
     subtotal: int = Field(default=...)
     shipping: int = Field(default=...)
     tax: int = Field(default=...)
