@@ -57,5 +57,20 @@ def update_user(
         )
     return user
 
-
+@router.delete(
+    "/delete/user_id/{user_id}",
+    response_model=UserDelete
+)
+def delete_user(
+    user_id:int,
+    db:Session=Depends(get_db)
+    
+):
+    user = user_service.delete_user(db,user_id)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User by id {user_id} not found",
+        )
+    return {"id": user}
     
