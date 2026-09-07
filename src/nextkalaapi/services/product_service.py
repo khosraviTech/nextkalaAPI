@@ -16,7 +16,8 @@ def get_products(db: Session) -> list[Product]:
 
 # create
 def create_product(db: Session, product_data: ProductInsert) -> Product:
-    return product_repository.create_product(db, **product_data.model_dump())
+    product = Product(**product_data.model_dump())
+    return product_repository.create_product(db, product)
 
 
 # update
