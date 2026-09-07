@@ -11,6 +11,14 @@ router = APIRouter()
 
 # read all
 @router.get("/all", response_model=list[ProductRow])
-async def read_products(db: Session = Depends(get_db)):
+def read_products(db: Session = Depends(get_db)):
     products = product_service.get_products(db)
     return products
+# read by id
+@router.get("/product_id/{product_id}",response_model=ProductRow)
+def read_product(
+    product_id:int,
+    db:Session=Depends(get_db)
+):
+    return product_service.get_product(db,product_id)
+
