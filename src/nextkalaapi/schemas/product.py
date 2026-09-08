@@ -120,7 +120,7 @@ class ProductInsert(ProductSchema):
 
 
 class ProductUpdate(BaseModel):
-    id: int = Field(default=...)
+    # id: int = Field(default=...)
     title: str | None = None
     description: str | None = None
     category: str | None = None
