@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import null
 from sqlalchemy.orm import Session
 
 from nextkalaapi.database import get_db
-from nextkalaapi.schemas.product import ProductInsert, ProductRow
+from nextkalaapi.schemas.product import ProductDelete, ProductInsert, ProductRow
 from nextkalaapi.services import product_service
 
 router = APIRouter()
@@ -31,3 +31,16 @@ def read_product(product_id: int, db: Session = Depends(get_db)):
 def create_product(product_data: ProductInsert, db: Session = Depends(get_db)):
     return product_service.create_product(db, product_data)
 
+
+# delete
+@router.delete("/delete/product_id/{product_id}", response_model=ProductDelete)
+def delete_product(product_id: int, db: Session = Depends(get_db)):
+    product = product_service.delete_product(db,product_id)
+    if product is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Product by id {product_id} not found",
+        )
+  
+    
+    return {"id": product}
