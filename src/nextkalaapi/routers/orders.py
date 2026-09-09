@@ -3,7 +3,8 @@ from httptools import HttpParserCallbackError
 from sqlalchemy.orm import Session
 
 from nextkalaapi.database import get_db
-from nextkalaapi.schemas.order import OrderInsert, OrderRow
+from nextkalaapi.schemas import order
+from nextkalaapi.schemas.order import OrderInsert, OrderRow, OrderUpdate
 from nextkalaapi.services import order_item_service, order_service
 
 router = APIRouter()
@@ -35,6 +36,17 @@ def read_orders(db: Session = Depends(get_db)):
 )
 def create_order(order_data: OrderInsert, db: Session = Depends(get_db)):
     order = order_service.create_order(db, order_data)
+    if order is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"order cration faild!"
+        )
+    return order
+
+
+# update
+@router.patch("/update/order_id/{order_id}", response_model=OrderRow)
+def update_order(order_id: int, order_data: OrderUpdate, db: Session = Depends(get_db)):
+    order = order_service.update_order(db, order_id, order_data)
     if order is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"order cration faild!"
