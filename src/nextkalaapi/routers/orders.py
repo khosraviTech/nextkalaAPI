@@ -27,3 +27,16 @@ def read_orders(db: Session = Depends(get_db)):
     return order_service.get_orders(db)
 
 
+# create
+@router.post(
+    "/create",
+    response_model=OrderRow,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_order(order_data: OrderInsert, db: Session = Depends(get_db)):
+    order = order_service.create_order(db, order_data)
+    if order is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"order cration faild!"
+        )
+    return order
