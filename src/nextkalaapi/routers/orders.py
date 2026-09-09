@@ -21,3 +21,9 @@ def read_order(order_id: int, db: Session = Depends(get_db)):
     return order
 
 
+# read all
+@router.get("/all", response_model=list[OrderRow])
+def read_orders(db: Session = Depends(get_db)):
+    return order_service.get_orders(db)
+
+
