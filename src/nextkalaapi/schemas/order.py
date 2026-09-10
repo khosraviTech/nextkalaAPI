@@ -45,11 +45,11 @@ class OrderSchema(BaseModel):
     shipping: int = Field(default=...)
     tax: int = Field(default=...)
     total: int = Field(default=...)
-    paymentStatus: str | None = Field(default=None, max_length=7)
-    orderStatus: str | None = Field(default=None, max_length=10)
-    created_at: datetime.datetime | None = Field(default=None)
+    # paymentStatus: str | None = Field(default=OrderStatus.processing)
+    # orderStatus: str | None = Field(default=PaymentStatus.pending)
+    # created_at: datetime.datetime | None = Field(default=None)
     user_id: int = Field(default=...)
-
+    
 
 class OrderRow(OrderSchema):
     id: int = Field(default=...)  # pyright: ignore[reportIncompatibleVariableOverride]
@@ -116,9 +116,9 @@ class OrderUpdate(BaseModel):
     shipping: int | None = None
     tax: int | None = None
     total: int | None = None
-    paymentStatus: PaymentStatus | None = Field(default=PaymentStatus.pending)
-    orderStatus: OrderStatus | None = Field(default=OrderStatus.processing)
-    created_at: datetime.datetime | None = Field(default=None)
+    # paymentStatus: PaymentStatus | None = Field(default=PaymentStatus.pending)
+    # orderStatus: OrderStatus | None = Field(default=OrderStatus.processing)
+    # created_at: datetime.datetime | None = Field(default=None)
     user_id: int | None = Field(default=...)
 
 
