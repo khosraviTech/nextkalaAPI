@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from nextkalaapi.database import get_db
 from nextkalaapi.schemas import order
-from nextkalaapi.schemas.order import OrderInsert, OrderRow, OrderUpdate
+from nextkalaapi.schemas.order import OrderDelete, OrderInsert, OrderRow, OrderUpdate
 from nextkalaapi.services import order_item_service, order_service
 
 router = APIRouter()
@@ -52,3 +52,14 @@ def update_order(order_id: int, order_data: OrderUpdate, db: Session = Depends(g
             status_code=status.HTTP_404_NOT_FOUND, detail=f"order cration faild!"
         )
     return order
+
+
+# delete
+@router.delete("/delete/order_id/{order_id}", response_model=OrderDelete)
+def delete_order(order_id: int, db: Session = Depends(get_db)):
+    order = order_service.delete_order(db, order_id)
+    if order is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"order cration faild!"
+        )
+    return {"id": order}
