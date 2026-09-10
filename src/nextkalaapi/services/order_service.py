@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import Session
 
 from nextkalaapi.models.order_model import Order
 from nextkalaapi.repositories import order_repository
@@ -14,9 +14,10 @@ def get_orders(db: Session) -> list[Order] | None:
     return order_repository.get_orders(db)
 
 
-# create
+# create 
 def create_order(db: Session, order_data: OrderInsert) -> Order:
-    return order_repository.create_order(db, **order_data.model_dump())
+    order = Order(**order_data.model_dump())
+    return order_repository.create_order(db, order)
 
 
 # update
