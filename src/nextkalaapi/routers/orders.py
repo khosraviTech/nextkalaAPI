@@ -1,11 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from httptools import HttpParserCallbackError
 from sqlalchemy.orm import Session
 
 from nextkalaapi.database import get_db
-from nextkalaapi.schemas import order
 from nextkalaapi.schemas.order import OrderDelete, OrderInsert, OrderRow, OrderUpdate
-from nextkalaapi.services import order_item_service, order_service
+from nextkalaapi.services import order_service
 
 router = APIRouter()
 

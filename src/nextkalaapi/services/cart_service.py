@@ -1,4 +1,3 @@
-from sqlalchemy import update
 from sqlalchemy.orm import Session
 
 from nextkalaapi.models.cart_model import Cart
