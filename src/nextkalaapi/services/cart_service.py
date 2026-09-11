@@ -18,7 +18,8 @@ def get_carts(db: Session) -> list[Cart] | None:
 
 # create
 def create_cart(db: Session, cart_data: cart.CartInsert) -> Cart:
-    return cart_repository.create_cart(db, **cart_data.model_dump())
+    cart = Cart(**cart_data.model_dump())
+    return cart_repository.create_cart(db,cart)
 
 
 # update
