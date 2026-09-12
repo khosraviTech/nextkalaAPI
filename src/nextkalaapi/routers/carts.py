@@ -1,9 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from psycopg.errors import DependentPrivilegeDescriptorsStillExist
 from sqlalchemy.orm import Session
 
 from nextkalaapi.database import get_db
-from nextkalaapi.models.cart_model import Cart
 from nextkalaapi.schemas.cart import CartInsert, CartRow
 from nextkalaapi.services import cart_service
 
@@ -26,6 +24,17 @@ def read_cart(cart_id: int, db: Session = Depends(get_db)):
     if cart is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"order by id {cart_id} not found!",
+            detail=f"cart by id {cart_id} not found!",
+        )
+    return cart
+
+# read all
+@router.get("/all", response_model=list[CartRow])
+def read_carts( db: Session = Depends(get_db)):
+    cart = cart_service.get_carts(db)
+    if cart is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"there is no cart!",
         )
     return cart
